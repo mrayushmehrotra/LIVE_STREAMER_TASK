@@ -11,12 +11,20 @@ def get_overlays():
     overlays = db.overlays.find()
     return [{**overlay, "_id": str(overlay["_id"])} for overlay in overlays]
 
+def get_overlay(overlay_id):
+    overlays = db.overlays
+    overlay = overlays.find_one({"_id": ObjectId(overlay_id)})
+    if overlay:
+        overlay["_id"] = str(overlay["_id"])
+        return overlay
+    return None
+
 def update_overlay(overlay_id, data):
     overlays = db.overlays
-    overlays.update_one({"_id": ObjectId(overlay_id)}, {"$set": data})
-    return True
+    result = overlays.update_one({"_id": ObjectId(overlay_id)}, {"$set": data})
+    return result.modified_count > 0
 
 def delete_overlay(overlay_id):
     overlays = db.overlays
-    overlays.delete_one({"_id": ObjectId(overlay_id)})
-    return True
+    result = overlays.delete_one({"_id": ObjectId(overlay_id)})
+    return result.deleted_count > 0

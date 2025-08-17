@@ -7,16 +7,26 @@ def start_stream():
     Body: { "rtsp_url": "rtsp://example.com/stream" }
     Response: { "hls_url": "/streams/livestream/index.m3u8" }
     """
-    data = request.get_json()
-    if "rtsp_url" not in data:
-        return jsonify({"error": "Missing RTSP URL"}), 400
+    try:
+        data = request.get_json()
+        if not data or "rtsp_url" not in data:
+            return jsonify({"error": "Missing RTSP URL"}), 400
 
-    hls_url = start_rtsp_to_hls(data["rtsp_url"])
-    return jsonify({"hls_url": hls_url}), 200
+        rtsp_url = data["rtsp_url"].strip()
+        if not rtsp_url.startswith("rtsp://"):
+            return jsonify({"error": "Invalid RTSP URL format"}), 400
+
+        hls_url = start_rtsp_to_hls(rtsp_url)
+        return jsonify({"hls_url": hls_url}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 def stream_status():
     """
     GET /api/stream/status
     Response: { "status": "running/stopped", "active_streams": [list] }
     """
-    return jsonify(get_stream_status()), 200
+    try:
+        return jsonify(get_stream_status()), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500

@@ -1,4 +1,4 @@
 from pymongo import MongoClient
 
-mongo_client = MongoClient('mongodb://localhost:27017/')
+mongo_client = MongoClient("mongodb+srv://ayushmehrotraisthedev:ayushmehrotraisthedev@cluster0.luggmsv.mongodb.net/rtsp")
 db = mongo_client.overlays_db

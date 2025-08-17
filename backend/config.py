@@ -1,7 +1,8 @@
 import os
 
+
 class Config:
-    MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017/livestream_app")
+    MONGO_URI = os.getenv("MONGO_URI", "mongodb+srv://ayushmehrotraisthedev:ayushmehrotraisthedev@cluster0.luggmsv.mongodb.net/rtsp")
     SECRET_KEY = os.getenv("SECRET_KEY", "supersecretkey")
     UPLOAD_FOLDER = os.path.join(os.getcwd(), "uploads")
     STREAM_FOLDER = os.path.join(os.getcwd(), "streams")

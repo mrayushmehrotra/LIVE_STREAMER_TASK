@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import Draggable from "react-draggable";
 import { ResizableBox } from "react-resizable";
@@ -42,6 +42,7 @@ const OverlayEditor = () => {
     await axios.delete(API_URL + id);
     setOverlays(overlays.filter((o) => o._id !== id));
   };
+  const nodeRef = useRef(null);
 
   return (
     <div className="absolute top-0 left-0 w-full h-full">
@@ -52,6 +53,8 @@ const OverlayEditor = () => {
           onStop={(_, data) =>
             updateOverlay(o._id, { position: { x: data.x, y: data.y } })
           }
+          nodeRef={nodeRef}
+          bounds="parent" // Added bounds to restrict dragging
         >
           <ResizableBox
             width={o.size.w}
@@ -60,7 +63,7 @@ const OverlayEditor = () => {
               updateOverlay(o._id, { size: { w: size.width, h: size.height } })
             }
           >
-            <div className="bg-white bg-opacity-70 p-1 relative border rounded">
+            <div ref={nodeRef} className="bg-white bg-opacity-70 p-1 relative border rounded">
               {o.type === "text" ? (
                 <span className="text-black">{o.content}</span>
               ) : (
